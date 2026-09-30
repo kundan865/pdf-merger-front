@@ -10,6 +10,7 @@ function App() {
   const [files, setFiles] = useState([]);
   const [mergedBlob, setMergedBlob] = useState(null);
   const [loading, setLoading] = useState(false);
+  let fileSize = 0;
 
   const handleChange = (e) => {
     const selected = Array.from(e.target.files);
@@ -58,24 +59,41 @@ function App() {
       setMergedBlob(pdfBlob);
 
     } catch (error) {
-      console.error("Full error:", error);
 
       if (error.response) {
+
         console.log("Status:", error.response.status);
         console.log("Headers:", error.response.headers);
         console.log("Response:", error.response.data);
+
+        let message = "";
+
+        // Because responseType is "blob"
+        if (error.response.data instanceof Blob) {
+          message = await error.response.data.text();
+        } else {
+          message = error.response.data?.message || "";
+        }
+
+        alert(
+          message ||
+          `Server Error: ${error.response.status} `
+        );
+
       } else if (error.request) {
-        console.log("Request sent but no response:", error.request);
+
+        alert("Request sent, but server did not respond.");
+
       } else {
-        console.log("Error:", error.message);
+
+        alert(error.message);
       }
 
-      alert("Merge failed. Check browser Console.");
-    }
-    finally {
+    } finally{
       setLoading(false);
     }
   }
+
   const downloadPDF = () => {
     if (!mergedBlob) return;
 
@@ -88,6 +106,11 @@ function App() {
 
     URL.revokeObjectURL(url);
   };
+
+  const totalSize = files.reduce((total, file) => total + file.size, 0);
+
+  const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 flex justify-center items-center p-5">
@@ -150,6 +173,13 @@ function App() {
               <span className="bg-blue-100 px-3 py-1 rounded-full text-blue-700">
                 {files.length} Files
               </span>
+
+            </div>
+
+            <div className="flex items-center justify-center bg-green-500 rounded-2xl px-6 py-2">
+              <p className="text-sm text-black">
+                Total Size: {totalSizeMB} MB
+              </p>
             </div>
 
             <div className="mt-4 max-h-72 overflow-y-auto space-y-3">
@@ -171,6 +201,7 @@ function App() {
                       <p className="text-sm text-gray-500">
                         {(file.size / 1024 / 1024).toFixed(2)} MB
                       </p>
+
                     </div>
 
                   </div>
