@@ -58,9 +58,21 @@ function App() {
       setMergedBlob(pdfBlob);
 
     } catch (error) {
-      console.error(error);
-      alert("Something went wrong while merging PDFs.");
-    } finally {
+      console.error("Full error:", error);
+
+      if (error.response) {
+        console.log("Status:", error.response.status);
+        console.log("Headers:", error.response.headers);
+        console.log("Response:", error.response.data);
+      } else if (error.request) {
+        console.log("Request sent but no response:", error.request);
+      } else {
+        console.log("Error:", error.message);
+      }
+
+      alert("Merge failed. Check browser Console.");
+    }
+    finally {
       setLoading(false);
     }
   }
