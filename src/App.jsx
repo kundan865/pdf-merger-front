@@ -46,10 +46,10 @@ function App() {
         }
       );
 
-      const pdfBlob = await response.blob(
+      const pdfBlob = new Blob(
         [response.data],
         {
-          type:"application/pdf"
+          type: "application/pdf",
         }
       );
 
