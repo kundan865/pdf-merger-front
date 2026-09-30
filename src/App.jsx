@@ -2,6 +2,8 @@ import './App.css'
 import { useState } from "react";
 import { Upload, FileText, Trash2, Download } from "lucide-react";
 import axios from 'axios';
+import rishabhImage from "./assets/rishabh-pdf-image.jpeg";
+import kundanImage from "./assets/kundan-pdf-image.jpeg";
 
 function App() {
 
@@ -87,6 +89,20 @@ function App() {
         <p className="text-center text-gray-500 mt-2">
           Select unlimited PDF files and merge them into one.
         </p>
+
+        <div className="flex items-center justify-between gap-3 sm:gap-5 md:gap-8 lg:gap-10 w-full">
+          <img
+            src={rishabhImage}
+            alt="Rishabh"
+            className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 rounded-full object-cover object-[center_20%]"
+          />
+
+          <img
+            src={kundanImage}
+            alt="Kundan"
+            className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 rounded-full object-cover"
+          />
+        </div>
 
         <label
           htmlFor="upload"
